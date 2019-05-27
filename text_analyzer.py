@@ -26,9 +26,6 @@ def load_thesaurus(thesaurus_file):
   thesaurus.transform = transform
   return thesaurus
 
-
-thesaurus = load_thesaurus()
-
 def load_stopwords_processor(stopwords_file):
   pt_chars = set(list('áãâéêíóõôúç'))
   kp = KeywordProcessor()
@@ -42,8 +39,6 @@ def load_stopwords_processor(stopwords_file):
 
   kp.transform = transform
   return kp
-
-stopwords = load_stopwords_processor()
 
 def remove_digits_punct(s):
     """
@@ -64,15 +59,21 @@ def stem(word):
   return unidecode.unidecode(stemmer.stem(word))
 [stem(w) for w in "habeas corpus homicídio arma de fogo impedimento homicídio culposo".split()]
 
-def analyze(text):
-  text = stopwords.transform(text)
-  terms = thesaurus.transform(text)
-  terms = [t for t in terms if len(t.split()) > 1]
-  terms = [" ".join(stem(w) for w in t.split()) for t in terms]
-  text = remove_digits_punct(text.lower())
-  text = ' '.join([stem(w) for w in text.split()])
-  text = [w for w in text.split() if len(w) > 2]
-  text += terms
-  return text
+def load_analyzer(thesaurus_file, stopwords_file):
+  stopwords = load_stopwords_processor(stopwords_file)
+  thesaurus = load_thesaurus(thesaurus_file)
+  
+  def transform(text):
+    text = stopwords.transform(text)
+    terms = thesaurus.transform(text)
+    terms = [t for t in terms if len(t.split()) > 1]
+    terms = [" ".join(stem(w) for w in t.split()) for t in terms]
+    text = remove_digits_punct(text.lower())
+    text = ' '.join([stem(w) for w in text.split()])
+    text = [w for w in text.split() if len(w) > 2]
+    text += terms
+    return text
+
+  return lambda text: transform(text)
 
 
