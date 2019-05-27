@@ -5,8 +5,8 @@ import nltk
 import string
 import unidecode
 
-def load_thesaurus():
-  df = pd.read_csv("data/thesaurus.csv")
+def load_thesaurus(thesaurus_file):
+  df = pd.read_csv(thesaurus_file)
   df.fillna('', inplace=True)
   thesaurus = KeywordProcessor()
   thesaurus.add_keywords_from_list(list(df['name'].values))
@@ -29,11 +29,11 @@ def load_thesaurus():
 
 thesaurus = load_thesaurus()
 
-def load_stopwords_processor():
+def load_stopwords_processor(stopwords_file):
   pt_chars = set(list('áãâéêíóõôúç'))
   kp = KeywordProcessor()
   kp.non_word_boundaries = kp.non_word_boundaries | pt_chars
-  stopwords = [n.strip() for n in open("data/stopwords.txt")]
+  stopwords = [n.strip() for n in open(stopwords_file)]
   for s in stopwords: kp.add_keyword(s, ' ')
   for s in nltk.corpus.stopwords.words('portuguese'): kp.add_keyword(s, ' ')
     
