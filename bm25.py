@@ -16,7 +16,7 @@ def compute_idf(df, corpus_size):
         idf[w] = math.log(corpus_size - freq + 0.5) - math.log(freq + 0.5)
     return idf
 
-def documents_length(bow):
+def doc_len(bow):
     return sum([float(c[1]) for c in bow])
 
 def bow2dict(bow):
