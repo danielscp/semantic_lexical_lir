@@ -52,6 +52,7 @@ def remove_digits_punct(s):
     punctuations = string.punctuation + '”“\'ªº–§˚'
     remove_punct = str.maketrans('', '', punctuations)
     s = s.translate(remove_punct)
+    s = unidecode.unidecode(s)
     return s
 
 stemmer = nltk.stem.RSLPStemmer()
