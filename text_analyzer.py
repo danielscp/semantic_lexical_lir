@@ -73,7 +73,7 @@ def load_analyzer(thesaurus_file, stopwords_file, stemming=True):
     if stemming:
       text = ' '.join([stem(w) for w in text.split()])
     text = [w for w in text.split() if len(w) > 2]
-    text += terms
+    text = terms + text
     return text
 
   return lambda text: transform(text)
