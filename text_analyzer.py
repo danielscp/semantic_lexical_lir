@@ -59,7 +59,7 @@ def stem(word):
   return unidecode.unidecode(stemmer.stem(word))
 [stem(w) for w in "habeas corpus homicídio arma de fogo impedimento homicídio culposo".split()]
 
-def load_analyzer(thesaurus_file, stopwords_file, stem=True):
+def load_analyzer(thesaurus_file, stopwords_file, stemming=True):
   stopwords = load_stopwords_processor(stopwords_file)
   thesaurus = load_thesaurus(thesaurus_file)
   
@@ -67,10 +67,11 @@ def load_analyzer(thesaurus_file, stopwords_file, stem=True):
     text = stopwords.transform(text)
     terms = thesaurus.transform(text)
     terms = [t for t in terms if len(t.split()) > 1]
-    if stem:
+    if stemming:
       terms = [" ".join(stem(w) for w in t.split()) for t in terms]
     text = remove_digits_punct(text.lower())
-    text = ' '.join([stem(w) for w in text.split()])
+    if stemming:
+      text = ' '.join([stem(w) for w in text.split()])
     text = [w for w in text.split() if len(w) > 2]
     text += terms
     return text
